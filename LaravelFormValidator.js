@@ -56,6 +56,7 @@ var phpdev = {
         if (getMethod != 'post') {
             window.location.href = $(this).attr('href');
         } else {
+            ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             var getCsrfMeta = csrfToken;
             var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
             $(this).parent().append(htmlForm);
@@ -97,7 +98,15 @@ var phpdev = {
                         phpdev.notify('error', response.message);
                     }
                 } else {
-                    phpdev.notify('error', pleaseContactToAdmin);
+                    if (debug) {
+                        var debugMessage = response;
+                        if (typeof response != 'string') {
+                            debugMessage = JSON.stringify(response)
+                        }
+                        phpdev.notify('error', debugMessage);
+                    } else {
+                        phpdev.notify('error', pleaseContactToAdmin);
+                    }
                 }
             }).fail(function (response) {
                 phpdev.rewriteCsrfToken();
