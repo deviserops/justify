@@ -92,11 +92,20 @@ var phpdev = {
             });
             $.post(url, data, function (response) {
                 if (response.status == true) {
-                    window.location.href = response.url;
+                    if ((typeof response.url != 'undefined') && (response.url != '')) {
+                        window.location.href = response.url;
+                        return false;
+                    }
+                    if ((typeof response.message != 'undefined') && (response.message != '')) {
+                        phpdev.notify('error', response.message);
+                    }
+                    ($('.' + loaderClass).length) ? $('.' + loaderClass).hide() : '';
+                    return true;
                 } else if (response.status == false) {
                     if (response.message != '') {
                         phpdev.notify('error', response.message);
                     }
+                    ($('.' + loaderClass).length) ? $('.' + loaderClass).hide() : '';
                 } else {
                     if (debug) {
                         var debugMessage = response;
