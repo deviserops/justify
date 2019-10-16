@@ -72,7 +72,7 @@ var phpdev = {
         form.find('input').removeClass('error');
         form.find('select').removeClass('error');
         form.find('textarea').removeClass('error');
-        var method = form.attr('method');
+        var method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get' ;
         var url = form.attr('action');
         //clean the name
         form.find('input,select,textarea').each(function () {
