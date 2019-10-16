@@ -83,6 +83,8 @@ var phpdev = {
         });
         var data = form.serializeArray();
         if (method == 'get') {
+            ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
+            form.removeClass('ajaxForm');
             form.submit();
         } else {
             $.ajaxSetup({
