@@ -72,7 +72,7 @@ var phpdev = {
         form.find('input').removeClass('error');
         form.find('select').removeClass('error');
         form.find('textarea').removeClass('error');
-        var method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get' ;
+        var method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get';
         var url = form.attr('action');
         //clean the name
         form.find('input,select,textarea').each(function () {
@@ -100,6 +100,16 @@ var phpdev = {
                     }
                     if ((typeof response.message != 'undefined') && (response.message != '')) {
                         phpdev.notify('error', response.message);
+                    }
+                    if ((typeof response.function != 'undefined') && (response.function != '')) {
+                        var fn = window[response.function];
+                        var param = null;
+                        if (typeof fn === 'function') {
+                            if ((typeof response.data != 'undefined') && (response.data != '')) {
+                                param = response.data;
+                            }
+                            fn(param);
+                        }
                     }
                     ($('.' + loaderClass).length) ? $('.' + loaderClass).hide() : '';
                     return true;
