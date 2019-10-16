@@ -166,6 +166,7 @@ var phpdev = {
                 } else {
                     phpdev.notify('error', pleaseContactToAdmin);
                 }
+                return false;
             });
         }
     },
