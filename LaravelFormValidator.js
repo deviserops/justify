@@ -16,6 +16,7 @@ var phpdev = {
         $(document).on('submit', '.ajaxForm', phpdev.submitFormWithValidate);
         $(document).on('change', 'input,textarea,select', phpdev.removeError);
         phpdev.addMetaTag();
+        phpdev.hgphpdevNotyMessage();
     },
     /**
      * @syntax phpdev.setup({params: value})
@@ -94,21 +95,25 @@ var phpdev = {
             });
             $.post(url, data, function (response) {
                 if (response.status == true) {
-                    if ((typeof response.url != 'undefined') && (response.url != '')) {
+                    if ((typeof response.url != 'undefined') && ($.trim(response.url) != '') && (response.url != null)) {
+                        if ((typeof response.message != 'undefined') && ($.trim(response.message) != '') && (response.message != null)) {
+                            localStorage.setItem('hgphpdev_noty_message', $.trim(response.message));
+                        }
                         window.location.href = response.url;
                         return false;
-                    }
-                    if ((typeof response.message != 'undefined') && (response.message != '')) {
-                        phpdev.notify('error', response.message);
-                    }
-                    if ((typeof response.function != 'undefined') && (response.function != '')) {
-                        var fn = window[response.function];
-                        var param = null;
-                        if (typeof fn === 'function') {
-                            if ((typeof response.data != 'undefined') && (response.data != '')) {
-                                param = response.data;
+                    } else {
+                        if ((typeof response.message != 'undefined') && ($.trim(response.message) != '') && (response.message != null)) {
+                            phpdev.notify('info', $.trim(response.message));
+                        }
+                        if ((typeof response.function != 'undefined') && ($.trim(response.function) != '') && (response.function != null)) {
+                            var fn = window[$.trim(response.function)];
+                            var param = null;
+                            if (typeof fn === 'function') {
+                                if ((typeof response.data != 'undefined') && (response.data != '')) {
+                                    param = response.data;
+                                }
+                                fn(param);
                             }
-                            fn(param);
                         }
                     }
                     ($('.' + loaderClass).length) ? $('.' + loaderClass).hide() : '';
@@ -178,6 +183,15 @@ var phpdev = {
                 }
                 return false;
             });
+        }
+    },
+    hgphpdevNotyMessage: function () {
+        var getMessage = localStorage.getItem('hgphpdev_noty_message');
+        if ((typeof getMessage != 'undefined') && (getMessage != '') && getMessage != null) {
+            setTimeout(function () {
+                phpdev.notify('info', getMessage);
+                localStorage.removeItem('hgphpdev_noty_message');
+            }, 1500);
         }
     },
     removeError: function () {
