@@ -57,6 +57,12 @@ var phpdev = {
         if (getMethod != 'post') {
             window.location.href = $(this).attr('href');
         } else {
+            var getConfirmMessage = $(this).data('confirm-message');
+            if (getConfirmMessage && typeof getConfirmMessage != 'undefined') {
+                if (!confirm(getConfirmMessage)) {
+                    return false;
+                }
+            }
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             var getCsrfMeta = csrfToken;
             var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
