@@ -45,6 +45,7 @@ var phpdev = {
             csrfTokenUrl = e.csrfTokenUrl ? e.csrfTokenUrl : null;
             refreshCsrfToken = e.refreshCsrfToken ? e.refreshCsrfToken : false;
         }
+        phpdev.rewriteCsrfToken();
     },
     addMetaTag: function () {
         if (!csrfToken) {
