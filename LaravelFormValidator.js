@@ -17,6 +17,7 @@ var phpdev = {
         $(document).on('change', 'input,textarea,select', phpdev.removeError);
         phpdev.addMetaTag();
         phpdev.hgphpdevNotyMessage();
+        phpdev.checkHrefHash();
     },
     /**
      * @syntax phpdev.setup({params: value})
@@ -26,7 +27,7 @@ var phpdev = {
      * @param underfieldError(boolean)      It will show error under the input field in the span tag.
      * @param notifyError(boolean)          This will show a noty popup when if any error occur.
      * @param maxNoty(number)               This will show maximum number of notification at once.
-     * @param pleaseContactToAdmin(string)  If debug is false and site is in development but still some error occur then it will show the default message.
+     * @param defaultErrorMessage(string)   If debug is false and site is in development but still some error occur then it will show the default message.
      * @param separateMessage(boolean)      If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
      * @param loaderClass(string)           When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
      * @param csrfTokenUrl(string)          If you already added the function from point 4.2 to refresh the token you can define the route here.
@@ -51,6 +52,14 @@ var phpdev = {
         if (!csrfToken) {
             phpdev.rewriteCsrfToken();
         }
+    },
+    checkHrefHash: function () {
+        var getHref = $(document).find('a');
+        getHref.each(function (i, e) {
+            if (($(e).attr('href') == '#') || ($(e).attr('href') == 'undefined') || ($(e).attr('href') == undefined) || ($(e).attr('href') == '')) {
+                $(e).attr('href', 'javascript:void(0)');
+            }
+        });
     },
     dataMethodPost: function (e) {
         e.preventDefault();
@@ -124,7 +133,7 @@ var phpdev = {
                         }
                     }
                     ($('.' + loaderClass).length) ? $('.' + loaderClass).hide() : '';
-                    return true;
+//                    return true;
                 } else if (response.status == false) {
                     if (response.message != '') {
                         phpdev.notify('error', response.message);
@@ -141,6 +150,7 @@ var phpdev = {
                         phpdev.notify('error', pleaseContactToAdmin);
                     }
                 }
+                phpdev.checkHrefHash();
             }).fail(function (response) {
                 phpdev.rewriteCsrfToken();
                 if (response.responseJSON && response.responseJSON.errors) {
@@ -245,6 +255,9 @@ var phpdev = {
             if (response.token) {
                 csrfToken = response.token;
                 ($('meta[name="csrf-token"]').length) ? $('meta[name="csrf-token"]').attr('content', csrfToken) : '';
+                $('form').each(function (i, e) {
+                    $(e).find('input[name="_token"]').val(csrfToken);
+                })
             }
         }).fail(function () {
             phpdev.notify('error', 'Url Not Found');
