@@ -55,7 +55,7 @@ showBorderError                     true                                    It w
 underfieldError                     true                                    It will show error under the input field in the span tag
 notifyError                         false                                   This will show a noty popup when if any error occur
 maxNoty                             1                                       This will show maximum number of notification at once
-pleaseContactToAdmin                'Please contact admin for more info'    If debug is false and site is in development but still some error occur then it will show the default message
+defaultErrorMessage                 'Please contact admin for more info'    If debug is false and site is in development but still some error occur then it will show the default message
 separateMessage                     false                                   If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
 loaderClass                         'loader-div'                            When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
 csrfTokenUrl                        null                                    If you already added the function from point 4.2 to refresh the token you can define the route here.
