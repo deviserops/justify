@@ -64,6 +64,7 @@ var phpdev = {
     dataMethodPost: function (e) {
         e.preventDefault();
         var getMethod = $(this).data('method');
+        var getClass = $(this).data('class');
         if (getMethod != 'post') {
             window.location.href = $(this).attr('href');
         } else {
@@ -75,7 +76,7 @@ var phpdev = {
             }
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             var getCsrfMeta = csrfToken;
-            var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
+            var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit' class='" + getClass + "'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
             $(this).parent().append(htmlForm);
             $("#postHrefSubmit").submit();
         }
