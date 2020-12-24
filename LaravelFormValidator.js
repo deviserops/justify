@@ -77,6 +77,7 @@ var phpdev = {
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             var getCsrfMeta = csrfToken;
             var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit' class='" + getClass + "'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
+            $(document).find('#postHrefSubmit').remove();
             $(this).parent().append(htmlForm);
             $("#postHrefSubmit").submit();
         }
