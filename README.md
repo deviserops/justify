@@ -63,6 +63,34 @@ This library used to validate the form with ajax and verify the form data based 
         customJustify: function(type, message){}
     });
     ```
+3. (Optional) User noty or model to display a message or build custom one. Example use customJustify function.
+    ```
+    justify.setup({
+        notifyError: true,
+        customJustify: function(type, message){
+            //You can use model to show message,
+            //I am using noty to display message as example
+             if (typeof noty === 'undefined') {
+                 return;
+             }
+             noty({
+                 text: message,
+                 theme: 'relax', // or relax
+                 type: type, // success, error, warning, information, notification
+                 maxVisible: 10,
+                 timeout: 4000,
+                 closeWith: ['click'],
+                 animation: {
+                     open: {height: 'toggle'},
+                     close: {height: 'toggle'},
+                     easing: 'swing',
+                     speed: 500 // opening & closing animation speed
+                 },
+                 progressBar: true
+             });
+        }
+    });
+    ```
 3. Add class ```ajaxForm``` to form tag.
 3. done.
 
