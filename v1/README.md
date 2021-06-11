@@ -70,15 +70,15 @@ This library used to validate the form with ajax and verify the form data based 
 ### Use Href tag ```<a href="">``` as a POST
 1. Set attribute for post request
         
-        ```data-method="post"```
+        data-method="post"
         
 2. Ask Confirm before process.
         
-        ```data-confirm-message```
+        data-confirm-message
         
 3. For Ajax submit
         
-        ```data-class="ajaxForm"```
+        data-class="ajaxForm"
         
 ### Display session messages
       <?php
