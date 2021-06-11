@@ -96,21 +96,21 @@ This library used to validate the form with ajax and verify the form data based 
 
 # Additional Feature:
 ### Use Href tag ```<a href="">``` as a POST
-     1. Set attribute for post request
+1. Set attribute for post request
         
         ```data-method="post"```
-     2. Ask Confirm before process.
+
+2. Ask Confirm before process.
         
         ```data-confirm-message```
-     3. For Ajax submit
+
+3. For Ajax submit
         
         ```data-class="ajaxForm"```
 
 ### Full Example
 
-    ```
     <a href="yourUrl" data-confirm-message="enter your message here" data-method="post" data-class="ajaxForm">Click me</a>
-    ```
 
 # Advantage
 1. It can also validate laravel array value for validator.
