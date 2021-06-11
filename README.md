@@ -66,7 +66,7 @@ This library used to validate the form with ajax and verify the form data based 
 3. (Optional) User noty or model to display a message or build custom one. Example use customJustify function.
     ```
     justify.setup({
-        notifyError: true,
+        justifyError: true,
         customJustify: function(type, message){
             //You can use model to show message,
             //I am using noty to display message as example
@@ -107,6 +107,17 @@ This library used to validate the form with ajax and verify the form data based 
 3. For Ajax submit
         
         data-class="ajaxForm"
+        
+### Display session messages
+    <?php
+    $infoMessage = request()->session()->get('info');
+    ?>
+    <script>
+        setTimeout(function () {
+            var message = '<?= $infoMessage; ?>';
+            justify.notify('info', message);
+        }, 500)
+    </script>
 
 ### Full Example
 
