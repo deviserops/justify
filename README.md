@@ -19,7 +19,7 @@ This library used to validate the form with ajax and verify the form data based 
 	    "message" => 'Token Refreshed',
 	    "token" => csrf_token()], 200);
 	}
-   ```
+    ```
 4. After validate the form in your controller use this return function:
     ```
     /**
