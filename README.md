@@ -51,7 +51,7 @@ This library used to validate the form with ajax and verify the form data based 
     ```
 
 # Uses:
-1. Add validate.js to your header.
+1. Add justify.js to your header.
 2. setup library
     ```
     justify.setup({
