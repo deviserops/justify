@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c2f73d21-5536-48e7-a0f1-bec8a3e3c73d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/justify.js" beforeDir="false" afterPath="$PROJECT_DIR$/justify.js" afterDir="false" />
-    </list>
+    <list default="true" id="c2f73d21-5536-48e7-a0f1-bec8a3e3c73d" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,7 +36,7 @@
       <updated>1623439237874</updated>
       <workItem from="1623439239354" duration="105000" />
       <workItem from="1628926930114" duration="5857000" />
-      <workItem from="1628939794705" duration="1393000" />
+      <workItem from="1628939794705" duration="1572000" />
     </task>
     <servers />
   </component>
