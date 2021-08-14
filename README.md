@@ -148,4 +148,5 @@ loaderClass                         'loader-div'                            When
 csrfTokenUrl                        null                                    If you already added the function from point 4.2 to refresh the token you can define the route here.
 refreshCsrfToken                    false                                   If you want to refresh csrf token on every fail ajax.
 customJustify                       function                                This is a custom notify function, it will take 2 param one for message type and second for message like in the example above.
+ajaxTimeout                         0                                       Set the timeout for ajax to run, by default it is 0;
 ```
