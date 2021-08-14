@@ -11,6 +11,11 @@ var csrfTokenUrl = null;
 var justifyLocalStorage = 'justify_noty_message';
 var customJustify = null;
 var ajaxTimeout = 0;
+var errorClass = {
+    'field': 'is-invalid',
+    'span': 'invalid-feedback',
+    'attr': 'role="alert"'
+}
 var justify = {
     ready: function () {
         //define all events here
@@ -89,10 +94,10 @@ var justify = {
         var form = $(this);
         (csrfToken) ? form.find('input[name="_token"]').remove() : '';
         ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
-        form.find('span.error').remove();
-        form.find('input').removeClass('error');
-        form.find('select').removeClass('error');
-        form.find('textarea').removeClass('error');
+        form.find('span.' + errorClass.span).remove();
+        form.find('input').removeClass(errorClass.field);
+        form.find('select').removeClass(errorClass.field);
+        form.find('textarea').removeClass(errorClass.field);
         var method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get';
         var url = form.attr('action');
         //clean the name
@@ -179,7 +184,7 @@ var justify = {
                             newString = '';
                         }
                         //this is for array fields end
-                        var errorHtml = '<span class="error">' + e[0] + '</span>';
+                        var errorHtml = '<span class="' + errorClass.span + '">' + e[0] + '</span>';
                         (separateMessage) ? justify.notify('error', e[0]) : '';
                         notifyHtml += e[0] + '</br>';
                         if (underfieldError) {
@@ -188,9 +193,9 @@ var justify = {
                             form.find('textarea[name="' + i + '"]').parent().append(errorHtml);
                         }
                         if (showBorderError) {
-                            form.find('input[name="' + i + '"]').addClass('error');
-                            form.find('select[name="' + i + '"]').addClass('error');
-                            form.find('textarea[name="' + i + '"]').addClass('error');
+                            form.find('input[name="' + i + '"]').addClass(errorClass.field);
+                            form.find('select[name="' + i + '"]').addClass(errorClass.field);
+                            form.find('textarea[name="' + i + '"]').addClass(errorClass.field);
                         }
                     });
                     //show all column error in notify
@@ -205,6 +210,7 @@ var justify = {
                 } else {
                     justify.notify('error', pleaseContactToAdmin);
                 }
+                justify.checkHrefHash();
                 return false;
             });
         }
@@ -219,8 +225,8 @@ var justify = {
         }
     },
     removeError: function () {
-        if ($(this).hasClass('error')) {
-            $(this).removeClass('error');
+        if ($(this).hasClass(errorClass.field)) {
+            $(this).removeClass(errorClass.field);
         }
     },
     notify: function (type, message) {
