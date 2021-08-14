@@ -46,6 +46,7 @@ var justify = {
             csrfTokenUrl = e.csrfTokenUrl ? e.csrfTokenUrl : null;
             refreshCsrfToken = e.refreshCsrfToken ? e.refreshCsrfToken : false;
             customJustify = e.customJustify ? e.customJustify : null;
+            ajaxTimeout = e.ajaxTimeout ? e.ajaxTimeout : 0;
         }
         justify.rewriteCsrfToken();
     },
@@ -102,7 +103,7 @@ var justify = {
             }
         });
         var data = new FormData(this);
-        if (method == 'get') {
+        if (method.toLowerCase() !== 'post') {
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             form.removeClass('ajaxForm');
             form.submit();
