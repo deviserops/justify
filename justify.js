@@ -10,6 +10,7 @@ var refreshCsrfToken = false;
 var csrfTokenUrl = null;
 var justifyLocalStorage = 'justify_noty_message';
 var customJustify = null;
+var ajaxTimeout = 0;
 var justify = {
     ready: function () {
         //define all events here
@@ -100,7 +101,7 @@ var justify = {
                 $(this).attr('name', $(this).attr('name').replace(/"/g, ''));
             }
         });
-        var data = form.serializeArray();
+        var data = new FormData(this);
         if (method == 'get') {
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
             form.removeClass('ajaxForm');
@@ -109,7 +110,10 @@ var justify = {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,
-                }
+                },
+                'contentType': false,
+                'processData': false,
+                'timeout': ajaxTimeout
             });
             $.post(url, data, function (response) {
                 if (response.status == true) {
