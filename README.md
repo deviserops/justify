@@ -128,9 +128,7 @@ This library used to validate the form with ajax and verify the form data based 
 2. Validate over href tag.
 3. No custom js validation or html validation required, it will direct validate from laravel request.
 4. If you leave ```href``` empty in a tag it will add ```javascript:void(0)``` to prevent unwanted click.
-
-# Disadvantages
-1. It cannot Submit file if there is file input in the form, you can add file name just like any input field. It will only send file name.
+5. Upload Files Support.
 
 
 # Plugin Options:
