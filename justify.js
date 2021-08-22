@@ -73,7 +73,7 @@ var justify = {
         var getMethod = $(this).data('method');
         var getClass = $(this).data('class');
         if (getMethod != 'post') {
-            window.location.href = $(this).attr('href');
+            return true;
         } else {
             var getConfirmMessage = $(this).data('confirm-message');
             if (getConfirmMessage && typeof getConfirmMessage != 'undefined') {
