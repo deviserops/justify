@@ -69,12 +69,12 @@ var justify = {
         });
     },
     dataMethodPost: function (e) {
-        e.preventDefault();
         var getMethod = $(this).data('method');
         var getClass = $(this).data('class');
         if (getMethod != 'post') {
             return true;
         } else {
+            e.preventDefault();
             var getConfirmMessage = $(this).data('confirm-message');
             if (getConfirmMessage && typeof getConfirmMessage != 'undefined') {
                 if (!confirm(getConfirmMessage)) {
