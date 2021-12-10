@@ -134,13 +134,14 @@ var justify = {
                             justify.notify('info', $.trim(response.message));
                         }
                         if ((typeof response.function != 'undefined') && ($.trim(response.function) != '') && (response.function != null)) {
-                            var fn = window[$.trim(response.function)];
-                            var param = null;
-                            if (typeof fn === 'function') {
+                            var fnName = $.trim(response.function);
+                            if (fnName) {
+                                var subFnNames = fnName.split('.')
+                                var param = null;
                                 if ((typeof response.data != 'undefined') && (response.data != '')) {
                                     param = response.data;
                                 }
-                                fn(param);
+                                justify.callDynamicFn(subFnNames, param)
                             }
                         }
                     }
@@ -214,6 +215,17 @@ var justify = {
                 return false;
             });
         }
+    },
+    callDynamicFn: function (subFn, param, callable = null) {
+        $.each(subFn, function (fnK, fnV) {
+            // console.log(typeof fnV);
+            if (typeof fnV == 'string') {
+                callable = (callable != null) ? callable[fnV] : window[fnV];
+            }
+            if (fnK + 1 == subFn.length) {
+                callable(param)
+            }
+        });
     },
     justifyNotyMessage: function () {
         var getMessage = localStorage.getItem(justifyLocalStorage);
