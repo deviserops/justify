@@ -5,7 +5,8 @@ var underfieldError = true;
 var justifyError = false;
 var pleaseContactToAdmin = null;
 var separateMessage = false;
-var csrfToken = $('meta[name="csrf-token"]').attr('content');
+var csrfToken = null;
+var csrfTokenName = null;
 var refreshCsrfToken = false;
 var csrfTokenUrl = null;
 var justifyLocalStorage = 'justify_noty_message';
@@ -37,6 +38,7 @@ var justify = {
      * @param separateMessage(boolean)      If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
      * @param loaderClass(string)           When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
      * @param csrfTokenUrl(string)          If you already added the function from point 4.2 to refresh the token you can define the route here.
+     * @param csrfToken(string)             This will be the token value
      * @param refreshCsrfToken(string)      If you want to refresh csrf token on every fail ajax.
      */
     setup: function (e) {
@@ -49,6 +51,8 @@ var justify = {
             separateMessage = e.separateMessage ? e.separateMessage : false;
             loaderClass = e.loaderClass ? e.loaderClass : 'loader-div';
             csrfTokenUrl = e.csrfTokenUrl ? e.csrfTokenUrl : null;
+            csrfToken = e.csrfToken ? e.csrfToken : null;
+            csrfTokenName = e.csrfTokenName ? e.csrfTokenName : null;
             refreshCsrfToken = e.refreshCsrfToken ? e.refreshCsrfToken : false;
             customJustify = e.customJustify ? e.customJustify : null;
             ajaxTimeout = e.ajaxTimeout ? e.ajaxTimeout : 0;
@@ -82,8 +86,7 @@ var justify = {
                 }
             }
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
-            var getCsrfMeta = csrfToken;
-            var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit' class='" + getClass + "'><input type='hidden' name='_token' value='" + getCsrfMeta + "'></form>";
+            var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit' class='" + getClass + "'><input type='hidden' name='" + csrfTokenName + "' value='" + csrfToken + "'></form>";
             $(document).find('#postHrefSubmit').remove();
             $(this).parent().append(htmlForm);
             $("#postHrefSubmit").submit();
@@ -92,7 +95,7 @@ var justify = {
     submitFormWithValidate: function (e) {
         e.preventDefault();
         var form = $(this);
-        (csrfToken) ? form.find('input[name="_token"]').remove() : '';
+        (csrfToken) ? form.find('input[name="' + csrfTokenName + '"]').remove() : '';
         ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
         form.find('span.' + errorClass.span).remove();
         form.find('input').removeClass(errorClass.field);
@@ -116,6 +119,7 @@ var justify = {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,
+                    'X-CSRFTOKEN': csrfToken,
                 },
                 'contentType': false,
                 'processData': false,
@@ -141,7 +145,8 @@ var justify = {
                                 if ((typeof response.data != 'undefined') && (response.data != '')) {
                                     param = response.data;
                                 }
-                                justify.callDynamicFn(subFnNames, param)
+                                allParam = {form, param}
+                                justify.callDynamicFn(subFnNames, allParam)
                             }
                         }
                     }
@@ -266,9 +271,9 @@ var justify = {
         $.get(csrfTokenUrl, function (response) {
             if (response.token) {
                 csrfToken = response.token;
-                ($('meta[name="csrf-token"]').length) ? $('meta[name="csrf-token"]').attr('content', csrfToken) : '';
+                ($('meta[name="' + csrfTokenName + '"]').length) ? $('meta[name="' + csrfTokenName + '"]').attr('content', csrfToken) : '';
                 $('form').each(function (i, e) {
-                    $(e).find('input[name="_token"]').val(csrfToken);
+                    $(e).find('input[name="' + csrfTokenName + '"]').val(csrfToken);
                 })
             }
         }).fail(function () {
