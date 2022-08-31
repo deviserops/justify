@@ -5,10 +5,10 @@ This library used to validate the form with ajax and verify the form data based 
 # Dependency:
 1. JQuery (Required)
 2. Noty.js (Optional)
-3. Add Csrf-token in header of your html page (Required any 1 of these two);
+3. Add Csrf Token in header of your html page (Required any 1 of these two);
     - Add meta tag to your header
     ```
-	<meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf-token-name" content="{{ csrf_token_value() }}">
     ```
 
     - If you want to refresh your csrf token after every request then create a route with below function that return your csrf token dynamic if any request crash, dump or fail when debugging code
@@ -51,14 +51,13 @@ This library used to validate the form with ajax and verify the form data based 
     ```
 
 # Uses:
-1. Add justify.js to your header.
+1. Add justify.js after JQuery to your code.
 2. setup library
     ```
     justify.setup({
         underfieldError: false,
         showBorderError: true,
-        refreshCsrfToken: true,
-        csrfTokenUrl: 'refreshToken', //this must be full url
+        csrfTokenName: 'csrf-token-name'
         notifyError: true,
         customJustify: function(type, message){}
     });
