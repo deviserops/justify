@@ -147,6 +147,8 @@ separateMessage                     false                                   If y
 loaderClass                         'loader-div'                            When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
 csrfTokenUrl                        null                                    If you already added the function from point 4.2 to refresh the token you can define the route here.
 refreshCsrfToken                    false                                   If you want to refresh csrf token on every fail ajax.
-customJustify                       function                                This is a custom notify function, it will take 2 param one for message type and second for message like in the example above.
+customJustify                       function                                This is a custom notify callback function, It will call if any error or message found, it will take 2 param one for message type and second for message like in the example above.
 ajaxTimeout                         0                                       Set the timeout for ajax to run, by default it is 0;
+csrfTokenName                       null                                    This is name of token input field of framework
+csrfToken                           null                                    This is current csrf token of the page (optional)
 ```
