@@ -1,6 +1,6 @@
-# Laravel Form Validator
+# JS Form Validator For Frameworks
 
-This library used to validate the form with ajax and verify the form data based on request validation.
+This library used to validate the form with ajax submit and verify the form data based on backend validation.
 
 # Dependency:
 1. JQuery (Required)
