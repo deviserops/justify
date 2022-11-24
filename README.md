@@ -1,6 +1,8 @@
 # JS Form Validator For Frameworks
 
 This library used to validate the form with ajax submit and verify the form data based on backend validation.
+It can also be used in other frameworks like django(python), laravel(php) etc.
+Simply change function representation (tags) according to the frameworks
 
 # Dependency:
 1. JQuery (Required)
