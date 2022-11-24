@@ -30,16 +30,18 @@ var justify = {
     /**
      * @syntax justify.setup({params: value})
      * @deprecated Pass the parameter with value in object with given parameter
-     * @param   debug(boolean)              As a developer for testing purple it will return database error and any other error that occur when submit the form.
+     * @param debug(boolean)                As a developer for testing purple it will return database error and any other error that occur when submit the form.
      * @param showBorderError(boolean)      It will show error if validation fail on any input field.
      * @param underfieldError(boolean)      It will show error under the input field in the span tag.
-     * @param justifyError(boolean)          This will show a noty popup when if any error occur.
+     * @param justifyError(boolean)         This will show a noty popup when if any error occur.
      * @param defaultErrorMessage(string)   If debug is false and site is in development but still some error occur then it will show the default message.
      * @param separateMessage(boolean)      If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
      * @param loaderClass(string)           When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
      * @param csrfTokenUrl(string)          If you already added the function from point 4.2 to refresh the token you can define the route here.
+     * @param csrfTokenName(string)         The name of csrf toke field for ex. _token, csrf-token. can be found in framework documentation
      * @param csrfToken(string)             This will be the token value
      * @param refreshCsrfToken(string)      If you want to refresh csrf token on every fail ajax.
+     * @param customJustify(string)         Callback function to display error messages (can be use to use extra plugin for notification)
      */
     setup: function (e) {
         if (typeof e !== 'undefined') {

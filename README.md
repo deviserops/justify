@@ -8,7 +8,7 @@ This library used to validate the form with ajax submit and verify the form data
 3. Add Csrf Token in header of your html page (Required any 1 of these two);
     - Add meta tag to your header
     ```
-	<meta name="csrf-token-name" content="{{ csrf_token_value() }}">
+	  <meta name="csrf-token-name" content="{{ csrf_token_value() }}">
     ```
 
     - If you want to refresh your csrf token after every request then create a route with below function that return your csrf token dynamic if any request crash, dump or fail when debugging code
@@ -45,7 +45,7 @@ This library used to validate the form with ajax submit and verify the form data
         ];
     }
     ```
-   (Recommended to use upper code in parent controller and call a function like following code):
+   (Recommended to use upper code in parent class and call a function like following code):
     ```
     return $this->sendResponse($status, $url, $message, $data, $function)
     ```
@@ -57,15 +57,15 @@ This library used to validate the form with ajax submit and verify the form data
     justify.setup({
         underfieldError: false,
         showBorderError: true,
-        csrfTokenName: 'csrf-token-name'
-        notifyError: true,
+        csrfTokenName: 'csrf-token-name<ex. _token, csrf-token>'
+        csrfToken: '<your csrf token>'
+        justifyError: true,
         customJustify: function(type, message){}
     });
     ```
 3. (Optional) User noty or model to display a message or build custom one. Example use customJustify function.
     ```
     justify.setup({
-        justifyError: true,
         customJustify: function(type, message){
             //You can use model to show message,
             //I am using noty to display message as example
@@ -123,31 +123,31 @@ This library used to validate the form with ajax submit and verify the form data
     <a href="yourUrl" data-confirm-message="enter your message here" data-method="post" data-class="ajaxForm">Click me</a>
 
 # Advantage
-1. It can also validate laravel array value for validator.
+1. It can also validate form array values.
 2. Validate over href tag.
-3. No custom js validation or html validation required, it will direct validate from laravel request.
+3. No custom js validation or html validation required, it will direct validate from backend frameworks default validator.
 4. If you leave ```href``` empty in a tag it will add ```javascript:void(0)``` to prevent unwanted click.
 
 # Disadvantages
-1. It cannot Submit file if there is file input in the form, you can add file name just like any input field. It will only send file name.
-
+1. <strike>It cannot Submit file if there is file input in the form, you can add file name just like any input field. It will only send file name.</strike>
+2. Not it can also upload file 
 
 # Plugin Options:
 
 ```
-Param                               Default                             Description
-
-debug                               false                                   As a developer for testing purpose it will return database error and any other error that occur when submit the form.
-showBorderError                     true                                    It will show error if validation fail on any input field.
-underfieldError                     true                                    It will show error under the input field in the span tag
-justifyError                        false                                   This will show a noty popup when if any error occur
-defaultErrorMessage                 'Please contact admin for more info'    If debug is false and site is in development but still some error occur then it will show the default message
-separateMessage                     false                                   If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
-loaderClass                         'loader-div'                            When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
-csrfTokenUrl                        null                                    If you already added the function from point 4.2 to refresh the token you can define the route here.
-refreshCsrfToken                    false                                   If you want to refresh csrf token on every fail ajax.
-customJustify                       function                                This is a custom notify callback function, It will call if any error or message found, it will take 2 param one for message type and second for message like in the example above.
-ajaxTimeout                         0                                       Set the timeout for ajax to run, by default it is 0;
-csrfTokenName                       null                                    This is name of token input field of framework
-csrfToken                           null                                    This is current csrf token of the page (optional)
+   Param                               Default                             Description
+   
+   debug                               false                                   As a developer for testing purpose it will return database error and any other error that occur when submit the form.
+   showBorderError                     true                                    It will show error if validation fail on any input field.
+   underfieldError                     true                                    It will show error under the input field in the span tag
+   justifyError                        false                                   This will show a noty popup when if any error occur
+   defaultErrorMessage                 'Please contact admin for more info'    If debug is false and site is in development but still some error occur then it will show the default message
+   separateMessage                     false                                   If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
+   loaderClass                         'loader-div'                            When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
+   csrfToken                           required                                If you already added the function from point 4.2 to refresh the token you can define the route here.
+   csrfTokenName                       required                                The name of csrf toke field for ex. _token, csrf-token. can be found in framework documentation
+   csrfTokenUrl                        null                                    If you already added the function from point 4.2 to refresh the token you can define the route here.
+   refreshCsrfToken                    false                                   If you want to refresh csrf token on every fail ajax.
+   customJustify                       function                                This is a custom notify callback function, It will call if any error or message found, it will take 2 param one for message type and second for message like in the example above.
+   ajaxTimeout                         0                                       Set the timeout for ajax to run, by default it is 0;
 ```
