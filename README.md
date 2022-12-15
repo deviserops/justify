@@ -136,7 +136,7 @@ Syntex can be change according to you frameworks. Laravel, Codeigniter, Django(P
 
 # Disadvantages
 1. <strike>It cannot Submit file if there is file input in the form, you can add file name just like any input field. It will only send file name.</strike>
-2. Not it can also upload file 
+2. Now it can also upload file 
 
 # Plugin Options:
 
