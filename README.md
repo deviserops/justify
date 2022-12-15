@@ -4,6 +4,10 @@ This library used to validate the form with ajax submit and verify the form data
 It can also be used in other frameworks like django(python), laravel(php) etc.
 Simply change function representation (tags) according to the frameworks
 
+# Important Note before proceed
+
+Syntex can be change according to you frameworks. Laravel, Codeigniter, Django(Python) etc.
+
 # Dependency:
 1. JQuery (Required)
 2. Noty.js (Optional)
