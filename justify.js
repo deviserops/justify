@@ -12,6 +12,7 @@ var csrfTokenUrl = null;
 var justifyLocalStorage = 'justify_noty_message';
 var customJustify = null;
 var ajaxTimeout = 0;
+var uniqueId = null;
 var errorClass = {
     'field': 'is-invalid',
     'span': 'invalid-feedback',
@@ -61,6 +62,17 @@ var justify = {
         }
         justify.rewriteCsrfToken();
     },
+    uniqueId: function () {
+        return Math.floor(Math.random() * 26) + Date.now()
+    },
+    xhrStatusCodeMessages: function () {
+        return {
+            404: function (xhr) {
+                justify.notify('error', '404')
+                return false
+            }
+        }
+    },
     addMetaTag: function () {
         if (!csrfToken) {
             justify.rewriteCsrfToken();
@@ -81,17 +93,34 @@ var justify = {
             return true;
         } else {
             e.preventDefault();
+            if (uniqueId) {
+                $(document).find('#' + uniqueId).remove();
+            }
+            uniqueId = justify.uniqueId()
             var getConfirmMessage = $(this).data('confirm-message');
             if (getConfirmMessage && typeof getConfirmMessage != 'undefined') {
                 if (!confirm(getConfirmMessage)) {
                     return false;
                 }
             }
+            var href = $(this).attr('href');
+            if (!href || (href.indexOf('javascript:void') != -1) || (href.indexOf(':void') != -1)) {
+                return false;
+            }
             ($('.' + loaderClass).length) ? $('.' + loaderClass).show() : '';
-            var htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='postHrefSubmit' class='" + getClass + "'><input type='hidden' name='" + csrfTokenName + "' value='" + csrfToken + "'></form>";
-            $(document).find('#postHrefSubmit').remove();
+            let htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='" + uniqueId + "' class='" + getClass + "'><input type='hidden' name='" + csrfTokenName + "' value='" + csrfToken + "'></form>";
             $(this).parent().append(htmlForm);
-            $("#postHrefSubmit").submit();
+            let dataObject = $(this).data()
+            let objLength = Object.keys(dataObject).length
+            $.each(dataObject, function (name, value) {
+                objLength--
+                if ($.inArray(name, ['method', 'class']) === -1) {
+                    $(document).find('#' + uniqueId).append("<input type='hidden' name='" + name + "' value='" + value + "'>")
+                }
+                if (objLength <= 0) {
+                    $("#" + uniqueId).submit();
+                }
+            })
         }
     },
     submitFormWithValidate: function (e) {
@@ -125,7 +154,8 @@ var justify = {
                 },
                 'contentType': false,
                 'processData': false,
-                'timeout': ajaxTimeout
+                'timeout': ajaxTimeout,
+                statusCode: justify.xhrStatusCodeMessages()
             });
             $.post(url, data, function (response) {
                 if (response.status == true) {
