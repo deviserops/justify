@@ -1,5 +1,5 @@
 class Justify {
-    justifyLocalStorage = '__justify_noty_message'
+    justifyLocalStorage = '__jtf_notificatoin_message'
     href_default = 'javascript:void(0)'
     errorClass = {
         'field': 'is-invalid',
