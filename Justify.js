@@ -1,6 +1,7 @@
 class Justify {
     justifyLocalStorage = '__jtf_notificatoin_message'
     href_default = 'javascript:void(0)'
+    defaultErrorMessage = 'Please contact to admin for more report'
     errorClass = {
         'field': 'is-invalid',
         'span': 'invalid-feedback',
@@ -16,21 +17,20 @@ class Justify {
             global._jtf = this;
         }
 
-        if (typeof options !== 'undefined' && options !== null) {
-            this.debug = options.debug ? options.debug : false;//set where to show error in notificatio or under fields
-            this.showBorderError = (options.showBorderError !== false); // set this to true to show border in red color
-            this.underfieldError = (options.underfieldError !== false); //set it true if you want to show error under field
-            this.justifyError = options.justifyError ? options.justifyError : false;//set this to true if you want to show error in notify
-            this.pleaseContactToAdmin = options.defaultErrorMessage ? options.defaultErrorMessage : 'Please contact to admin for more report'; //default error message
-            this.splitMessage = options.splitMessage ? options.splitMessage : false;
-            this.loaderClass = options.loaderClass ? options.loaderClass : 'loader-div';
-            this.csrfTokenUrl = options.csrfTokenUrl ? options.csrfTokenUrl : null;
-            this.csrfToken = options.csrfToken ? options.csrfToken : null;
-            this.csrfTokenName = options.csrfTokenName ? options.csrfTokenName : null;
-            this.refreshCsrfToken = options.refreshCsrfToken ? options.refreshCsrfToken : false;
-            this.customJustify = options.customJustify ? options.customJustify : null;
-            this.ajaxTimeout = options.ajaxTimeout ? options.ajaxTimeout : 0;
-        }
+        this.debug = options && typeof options.debug !== "undefined" ? options.debug : false
+        this.showBorderError = !(options && options.showBorderError === false)
+        this.underfieldError = !!(options && options.underfieldError === true)
+        this.justifyError = !!(options && options.justifyError === true)
+        this.splitMessage = !!(options && options.splitMessage === true)
+        this.refreshCsrfToken = !!(options && options.refreshCsrfToken === true)
+        this.pleaseContactToAdmin = options && options.defaultErrorMessage ? options.defaultErrorMessage : this.defaultErrorMessage; //default error message
+        this.loaderClass = options && options.loaderClass ? options.loaderClass : 'loader-div';
+        this.csrfTokenUrl = options && options.csrfTokenUrl ? options.csrfTokenUrl : null;
+        this.csrfToken = options && options.csrfToken ? options.csrfToken : null;
+        this.csrfTokenName = options && options.csrfTokenName ? options.csrfTokenName : null;
+        this.customJustify = options && options.customJustify ? options.customJustify : null;
+        this.ajaxTimeout = options && options.ajaxTimeout ? options.ajaxTimeout : 0;
+
         _jtf.rewriteCsrfToken();
         _jtf.init()
     }
@@ -288,6 +288,9 @@ class Justify {
         }
         if (!message) {
             return;
+        }
+        if (!_jtf.customJustify) {
+            alert(type + ': ' + message)
         }
         if (_jtf.customJustify && (typeof _jtf.customJustify == 'function')) {
             _jtf.customJustify(type, message);
