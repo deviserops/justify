@@ -21,6 +21,7 @@ class Justify {
         this.showBorderError = !(options && options.showBorderError === false)
         this.underfieldError = !!(options && options.underfieldError === true)
         this.justifyError = !!(options && options.justifyError === true)
+        this.errorField = !(options && options.errorField === false)
         this.splitMessage = !!(options && options.splitMessage === true)
         this.refreshCsrfToken = !!(options && options.refreshCsrfToken === true)
         this.pleaseContactToAdmin = options && options.defaultErrorMessage ? options.defaultErrorMessage : this.defaultErrorMessage; //default error message
@@ -214,7 +215,12 @@ class Justify {
                         }
                         //this is for array fields end
                         var errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
-                        (_jtf.splitMessage) ? _jtf.notify('error', e[0]) : '';
+                        let splitMessage = e[0];
+                        if (_jtf.errorField) {
+                            notifyHtml += i + ': ';
+                            splitMessage = i + ': ' + e[0];
+                        }
+                        (_jtf.splitMessage) ? _jtf.notify('error', splitMessage) : '';
                         notifyHtml += e[0] + '</br>';
                         if (_jtf.underfieldError) {
                             form.find('input[name="' + i + '"]').parent().append(errorHtml);
