@@ -83,7 +83,7 @@ class Justify {
             return false;
         }
 
-        if (getMethod.toLowerCase() !== 'post') {
+        if (!getMethod || getMethod.toLowerCase() !== 'post') {
             return true;
         } else {
             e.preventDefault();
