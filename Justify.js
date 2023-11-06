@@ -236,9 +236,12 @@ class Justify {
                     //show all column error in notify
                     !_jtf.splitMessage ? _jtf.notify('error', notifyHtml) : '';
                 } else if (response.responseJSON && response.responseJSON.message) {
+                    //show message if defined
+                    _jtf.notify('error', response.responseJSON.message);
+                } else if (response.responseJSON) {
                     //show all db error in notify
                     if (_jtf.debug) {
-                        _jtf.notify('error', response.responseJSON.message);
+                        _jtf.notify('error', response.statusText);
                     } else {
                         _jtf.notify('error', _jtf.pleaseContactToAdmin);
                     }
