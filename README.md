@@ -56,7 +56,7 @@ Simply change function representation (tags) according to the frameworks
 1. Add justify.js after JQuery to your code.
 2. setup library
     ```
-    justify.setup({
+    let justify = new Justify({
         underfieldError: false,
         showBorderError: true,
         csrfTokenName: 'csrf-token-name<ex. _token, csrf-token>'
@@ -67,28 +67,28 @@ Simply change function representation (tags) according to the frameworks
     ```
 3. (Optional) User noty or model to display a message or build custom one. Example use customJustify function.
     ```
-    justify.setup({
-        customJustify: function(type, message){
+    let justify = new Justify({
+        customJustify: function (type, message) {
             //You can use model to show message,
             //I am using noty to display message as example
-             if (typeof noty === 'undefined') {
-                 return;
-             }
-             noty({
-                 text: message,
-                 theme: 'relax', // or relax
-                 type: type, // success, error, warning, information, notification
-                 maxVisible: 10,
-                 timeout: 4000,
-                 closeWith: ['click'],
-                 animation: {
-                     open: {height: 'toggle'},
-                     close: {height: 'toggle'},
-                     easing: 'swing',
-                     speed: 500 // opening & closing animation speed
-                 },
-                 progressBar: true
-             });
+            if (typeof noty === 'undefined') {
+                return;
+            }
+            noty({
+                text: message,
+                theme: 'relax', // or relax
+                type: type, // success, error, warning, information, notification
+                maxVisible: 10,
+                timeout: 4000,
+                closeWith: ['click'],
+                animation: {
+                    open: {height: 'toggle'},
+                    close: {height: 'toggle'},
+                    easing: 'swing',
+                    speed: 500 // opening & closing animation speed
+                },
+                progressBar: true
+            });
         }
     });
     ```
@@ -116,6 +116,7 @@ Simply change function representation (tags) according to the frameworks
     <script>
         setTimeout(function () {
             var message = '<?= $infoMessage; ?>';
+            let justify = new Justify();
             justify.notify('info', message);
         }, 500)
     </script>
