@@ -66,7 +66,7 @@ class Justify {
     }
 
     checkHrefHash() {
-        var getHref = $(document).find('a');
+        let getHref = $(document).find('a');
         getHref.each(function (i, e) {
             let href = $.trim($(e).attr('href'))
             if ((href === '#') || (href === 'undefined') || (href === undefined) || (href === '')) {
@@ -76,9 +76,9 @@ class Justify {
     }
 
     dataMethodPost(e) {
-        var getMethod = $(this).data('method');
-        var getClass = $(this).data('class');
-        var href = $(this).attr('href');
+        let getMethod = $(this).data('method');
+        let getClass = $(this).data('class');
+        let href = $(this).attr('href');
 
         if ((href === '#') || (href === 'undefined') || (href === undefined) || (href === '') || (href === _jtf.href_default) || (href.indexOf(':void') !== -1)) {
             return false;
@@ -92,7 +92,7 @@ class Justify {
                 $(document).find('#' + _jtf.uniqueId).remove();
             }
             _jtf.uniqueId = _jtf.generateUniqueId()
-            var getConfirmMessage = $(this).data('confirm-message');
+            let getConfirmMessage = $(this).data('confirm-message');
             if (getConfirmMessage && typeof getConfirmMessage != 'undefined') {
                 if (!confirm(getConfirmMessage)) {
                     return false;
@@ -118,15 +118,15 @@ class Justify {
 
     submitFormWithValidate(e) {
         e.preventDefault();
-        var form = $(this);
+        let form = $(this);
         (_jtf.csrfToken) ? form.find('input[name="' + _jtf.csrfTokenName + '"]').remove() : '';
         _jtf.loader()
         form.find('span.' + _jtf.errorClass.span).remove();
         form.find('input').removeClass(_jtf.errorClass.field);
         form.find('select').removeClass(_jtf.errorClass.field);
         form.find('textarea').removeClass(_jtf.errorClass.field);
-        var method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get';
-        var url = form.attr('action');
+        let method = ((typeof form.attr('method') != 'undefined')) ? form.attr('method') : 'get';
+        let url = form.attr('action');
         //clean the name
         form.find('input,select,textarea').each(function () {
             if ($(this).attr('name') && $(this).attr('name') !== undefined) {
@@ -134,7 +134,7 @@ class Justify {
                 $(this).attr('name', $(this).attr('name').replace(/"/g, ''));
             }
         });
-        var data = new FormData(this);
+        let data = new FormData(this);
         if (method.toLowerCase() !== 'post') {
             form.removeClass('ajaxForm');
             form.submit();
@@ -162,10 +162,10 @@ class Justify {
                             _jtf.notify('info', $.trim(response.message));
                         }
                         if ((typeof response.function != 'undefined') && ($.trim(response.function) !== '') && (response.function != null)) {
-                            var fnName = $.trim(response.function);
+                            let fnName = $.trim(response.function);
                             if (fnName) {
-                                var subFnNames = fnName.split('.')
-                                var param = null;
+                                let subFnNames = fnName.split('.')
+                                let param = null;
                                 if ((typeof response.data != 'undefined') && (response.data !== '')) {
                                     param = response.data;
                                 }
@@ -183,7 +183,7 @@ class Justify {
                     _jtf.loader(false)
                 } else {
                     if (_jtf.debug) {
-                        var debugMessage = response;
+                        let debugMessage = response;
                         if (typeof response != 'string') {
                             debugMessage = JSON.stringify(response)
                         }
@@ -196,13 +196,13 @@ class Justify {
             }).fail(function (response) {
                 _jtf.rewriteCsrfToken();
                 if (response.responseJSON && response.responseJSON.errors) {
-                    var errors = response.responseJSON.errors;
-                    var notifyHtml = '';
+                    let errors = response.responseJSON.errors;
+                    let notifyHtml = '';
                     $.each(errors, function (i, e) {
                         //This is for array fields
                         if (i.includes('.')) {
-                            var arrayText = i.split('.');
-                            var newString = '';
+                            let arrayText = i.split('.');
+                            let newString = '';
                             $.each(arrayText, function (j, k) {
                                 if (j != 0) {
                                     newString += '[' + k + ']';
@@ -214,7 +214,7 @@ class Justify {
                             newString = '';
                         }
                         //this is for array fields end
-                        var errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
+                        let errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
                         let splitMessage = e[0];
                         if (_jtf.errorField) {
                             notifyHtml += i + ': ';
@@ -274,7 +274,7 @@ class Justify {
     }
 
     justifyNotyMessage() {
-        var getMessage = localStorage.getItem(_jtf.justifyLocalStorage);
+        let getMessage = localStorage.getItem(_jtf.justifyLocalStorage);
         if ((typeof getMessage != 'undefined') && ($.trim(getMessage) !== '') && getMessage != null) {
             setTimeout(function () {
                 _jtf.notify('info', getMessage);
