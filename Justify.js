@@ -1,4 +1,3 @@
-
 class Justify {
     justifyLocalStorage = '__jtf_notificatoin_message'
     href_default = 'javascript:void(0)'
