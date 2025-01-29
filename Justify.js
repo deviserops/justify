@@ -76,7 +76,7 @@ class Justify {
     }
 
     dataMethodPost(e) {
-        let getMethod = $(this).data('method');
+        let getMethod = $(this).data('method') ?? 'get';
         let getClass = $(this).data('class');
         let href = $(this).attr('href');
 
@@ -84,7 +84,7 @@ class Justify {
             return false;
         }
 
-        if (!getMethod || getMethod.toLowerCase() !== 'post') {
+        if (getClass !== 'ajaxForm') {
             return true;
         } else {
             e.preventDefault();
