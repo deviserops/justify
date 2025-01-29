@@ -1,5 +1,5 @@
 class Justify {
-    justifyLocalStorage = '__jtf_notificatoin_message'
+    justifyLocalStorage = '__jtf_notification_message'
     href_default = 'javascript:void(0)'
     defaultErrorMessage = 'Please contact to admin for more report'
     errorClass = {
