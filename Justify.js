@@ -102,6 +102,7 @@ class Justify {
             _jtf.loader()
             let htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='" + _jtf.uniqueId + "' class='" + getClass + "'><input type='hidden' name='" + _jtf.csrfTokenName + "' value='" + _jtf.csrfToken + "'></form>";
             $(this).parent().append(htmlForm);
+            $(document).find('#' + _jtf.uniqueId).css({position: 'absolute', display: 'none'})
             let dataObject = $(this).data()
             let objLength = Object.keys(dataObject).length
             $.each(dataObject, function (name, value) {
