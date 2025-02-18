@@ -39,7 +39,7 @@ class Justify {
     init() {
         //define all events here
         $(document).on('click', 'a', _jtf.dataMethodPost);
-        $(document).on('submit', '.ajaxForm', _jtf.submitFormWithValidate);
+        $(document).on('submit', '.ajaxForm', _jtf.submitAjax);
         $(document).on('change', 'input,textarea,select', _jtf.removeError);
         _jtf.addMetaTag();
         _jtf.justifyNotyMessage();
@@ -100,7 +100,7 @@ class Justify {
             }
 
             _jtf.loader()
-            let htmlForm = "<form action='" + $(this).attr('href') + "' method='" + getMethod + "' id='" + _jtf.uniqueId + "' class='" + getClass + "'><input type='hidden' name='" + _jtf.csrfTokenName + "' value='" + _jtf.csrfToken + "'></form>";
+            let htmlForm = "<form action='" + href + "' method='" + getMethod + "' id='" + _jtf.uniqueId + "' class='" + getClass + "'><input type='hidden' name='" + _jtf.csrfTokenName + "' value='" + _jtf.csrfToken + "'></form>";
             $(this).parent().append(htmlForm);
             $(document).find('#' + _jtf.uniqueId).css({position: 'absolute', display: 'none'})
             let dataObject = $(this).data()
@@ -117,7 +117,112 @@ class Justify {
         }
     }
 
-    submitFormWithValidate(e) {
+    successResponse(form, response) {
+        if (response.status === true) {
+            if ((typeof response.url != 'undefined') && ($.trim(response.url) !== '') && (response.url != null)) {
+                if ((typeof response.message != 'undefined') && ($.trim(response.message) !== '') && (response.message != null)) {
+                    localStorage.setItem(_jtf.justifyLocalStorage, $.trim(response.message));
+                }
+                window.location.href = response.url;
+                return false;
+            } else {
+                if ((typeof response.message != 'undefined') && ($.trim(response.message) !== '') && (response.message != null)) {
+                    _jtf.notify('info', $.trim(response.message));
+                }
+                if ((typeof response.function != 'undefined') && ($.trim(response.function) !== '') && (response.function != null)) {
+                    let fnName = $.trim(response.function);
+                    if (fnName) {
+                        let subFnNames = fnName.split('.')
+                        let param = null;
+                        if ((typeof response.data != 'undefined') && (response.data !== '')) {
+                            param = response.data;
+                        }
+                        let allParam = {form, param}
+                        _jtf.callDynamicFn(subFnNames, allParam)
+                    }
+                }
+            }
+            _jtf.loader(false)
+//                    return true;
+        } else if (response.status === false) {
+            if ($.trim(response.message) !== '') {
+                _jtf.notify('error', response.message);
+            }
+            _jtf.loader(false)
+        } else {
+            if (_jtf.debug) {
+                let debugMessage = response;
+                if (typeof response != 'string') {
+                    debugMessage = JSON.stringify(response)
+                }
+                _jtf.notify('error', debugMessage);
+            } else {
+                _jtf.notify('error', _jtf.pleaseContactToAdmin);
+            }
+        }
+        _jtf.checkHrefHash();
+    }
+
+    failedResponse(form, xhr) {
+        _jtf.rewriteCsrfToken();
+        if (xhr.responseJSON && xhr.responseJSON.errors) {
+            let errors = xhr.responseJSON.errors;
+            let notifyHtml = '';
+            $.each(errors, function (i, e) {
+                //This is for array fields
+                if (i.includes('.')) {
+                    let arrayText = i.split('.');
+                    let newString = '';
+                    $.each(arrayText, function (j, k) {
+                        if (j != 0) {
+                            newString += '[' + k + ']';
+                        } else {
+                            newString += k;
+                        }
+                    });
+                    i = newString;
+                    newString = '';
+                }
+                //this is for array fields end
+                let errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
+                let splitMessage = e[0];
+                if (_jtf.errorField) {
+                    notifyHtml += i + ': ';
+                    splitMessage = i + ': ' + e[0];
+                }
+                (_jtf.splitMessage) ? _jtf.notify('error', splitMessage) : '';
+                notifyHtml += e[0] + '</br>';
+                if (_jtf.underfieldError) {
+                    form.find('input[name="' + i + '"]').parent().append(errorHtml);
+                    form.find('select[name="' + i + '"]').parent().append(errorHtml);
+                    form.find('textarea[name="' + i + '"]').parent().append(errorHtml);
+                }
+                if (_jtf.showBorderError) {
+                    form.find('input[name="' + i + '"]').addClass(_jtf.errorClass.field);
+                    form.find('select[name="' + i + '"]').addClass(_jtf.errorClass.field);
+                    form.find('textarea[name="' + i + '"]').addClass(_jtf.errorClass.field);
+                }
+            });
+            //show all column error in notify
+            !_jtf.splitMessage ? _jtf.notify('error', notifyHtml) : '';
+        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+            //show message if defined
+            _jtf.notify('error', xhr.responseJSON.message);
+        } else if (xhr.responseJSON) {
+            //show all db error in notify
+            if (_jtf.debug) {
+                _jtf.notify('error', xhr.statusText);
+            } else {
+                _jtf.notify('error', _jtf.pleaseContactToAdmin);
+            }
+        } else {
+            _jtf.notify('error', _jtf.pleaseContactToAdmin);
+        }
+        _jtf.checkHrefHash();
+        return false;
+    }
+
+    submitAjax(e) {
         e.preventDefault();
         let form = $(this);
         (_jtf.csrfToken) ? form.find('input[name="' + _jtf.csrfTokenName + '"]').remove() : '';
@@ -136,123 +241,28 @@ class Justify {
             }
         });
         let data = new FormData(this);
-        if (method.toLowerCase() !== 'post') {
-            form.removeClass('ajaxForm');
-            form.submit();
-        } else {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': _jtf.csrfToken,
-                    'X-CSRFTOKEN': _jtf.csrfToken,
-                },
-                'contentType': false,
-                'processData': false,
-                'timeout': _jtf.ajaxTimeout,
-                statusCode: _jtf.xhrStatusCodeMessages()
-            });
-            $.post(url, data, function (response) {
-                if (response.status === true) {
-                    if ((typeof response.url != 'undefined') && ($.trim(response.url) !== '') && (response.url != null)) {
-                        if ((typeof response.message != 'undefined') && ($.trim(response.message) !== '') && (response.message != null)) {
-                            localStorage.setItem(_jtf.justifyLocalStorage, $.trim(response.message));
-                        }
-                        window.location.href = response.url;
-                        return false;
-                    } else {
-                        if ((typeof response.message != 'undefined') && ($.trim(response.message) !== '') && (response.message != null)) {
-                            _jtf.notify('info', $.trim(response.message));
-                        }
-                        if ((typeof response.function != 'undefined') && ($.trim(response.function) !== '') && (response.function != null)) {
-                            let fnName = $.trim(response.function);
-                            if (fnName) {
-                                let subFnNames = fnName.split('.')
-                                let param = null;
-                                if ((typeof response.data != 'undefined') && (response.data !== '')) {
-                                    param = response.data;
-                                }
-                                let allParam = {form, param}
-                                _jtf.callDynamicFn(subFnNames, allParam)
-                            }
-                        }
-                    }
-                    _jtf.loader(false)
-//                    return true;
-                } else if (response.status === false) {
-                    if ($.trim(response.message) !== '') {
-                        _jtf.notify('error', response.message);
-                    }
-                    _jtf.loader(false)
-                } else {
-                    if (_jtf.debug) {
-                        let debugMessage = response;
-                        if (typeof response != 'string') {
-                            debugMessage = JSON.stringify(response)
-                        }
-                        _jtf.notify('error', debugMessage);
-                    } else {
-                        _jtf.notify('error', _jtf.pleaseContactToAdmin);
-                    }
-                }
-                _jtf.checkHrefHash();
-            }).fail(function (response) {
-                _jtf.rewriteCsrfToken();
-                if (response.responseJSON && response.responseJSON.errors) {
-                    let errors = response.responseJSON.errors;
-                    let notifyHtml = '';
-                    $.each(errors, function (i, e) {
-                        //This is for array fields
-                        if (i.includes('.')) {
-                            let arrayText = i.split('.');
-                            let newString = '';
-                            $.each(arrayText, function (j, k) {
-                                if (j != 0) {
-                                    newString += '[' + k + ']';
-                                } else {
-                                    newString += k;
-                                }
-                            });
-                            i = newString;
-                            newString = '';
-                        }
-                        //this is for array fields end
-                        let errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
-                        let splitMessage = e[0];
-                        if (_jtf.errorField) {
-                            notifyHtml += i + ': ';
-                            splitMessage = i + ': ' + e[0];
-                        }
-                        (_jtf.splitMessage) ? _jtf.notify('error', splitMessage) : '';
-                        notifyHtml += e[0] + '</br>';
-                        if (_jtf.underfieldError) {
-                            form.find('input[name="' + i + '"]').parent().append(errorHtml);
-                            form.find('select[name="' + i + '"]').parent().append(errorHtml);
-                            form.find('textarea[name="' + i + '"]').parent().append(errorHtml);
-                        }
-                        if (_jtf.showBorderError) {
-                            form.find('input[name="' + i + '"]').addClass(_jtf.errorClass.field);
-                            form.find('select[name="' + i + '"]').addClass(_jtf.errorClass.field);
-                            form.find('textarea[name="' + i + '"]').addClass(_jtf.errorClass.field);
-                        }
-                    });
-                    //show all column error in notify
-                    !_jtf.splitMessage ? _jtf.notify('error', notifyHtml) : '';
-                } else if (response.responseJSON && response.responseJSON.message) {
-                    //show message if defined
-                    _jtf.notify('error', response.responseJSON.message);
-                } else if (response.responseJSON) {
-                    //show all db error in notify
-                    if (_jtf.debug) {
-                        _jtf.notify('error', response.statusText);
-                    } else {
-                        _jtf.notify('error', _jtf.pleaseContactToAdmin);
-                    }
-                } else {
-                    _jtf.notify('error', _jtf.pleaseContactToAdmin);
-                }
-                _jtf.checkHrefHash();
-                return false;
-            });
-        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': _jtf.csrfToken,
+                'X-CSRFTOKEN': _jtf.csrfToken,
+            },
+            'contentType': false,
+            'processData': false,
+            'timeout': _jtf.ajaxTimeout,
+            statusCode: _jtf.xhrStatusCodeMessages()
+        });
+
+        $.ajax({
+            url: url,
+            method: method.toUpperCase(),
+            data: data,
+            success: function (response) {
+                _jtf.successResponse(form, response)
+            },
+            error: function (xhr) {
+                _jtf.failedResponse(form, xhr)
+            }
+        })
     }
 
     loader(show = true) {
