@@ -84,7 +84,7 @@ class Justify {
             return false;
         }
 
-        if (getClass !== 'ajaxForm') {
+        if (getMethod.toLowerCase() === 'get' && getClass !== 'ajaxForm') {
             return true;
         } else {
             e.preventDefault();
