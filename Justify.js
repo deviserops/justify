@@ -195,11 +195,13 @@ class Justify {
                 if (_jtf.underfieldError) {
                     form.find('input[name="' + i + '"]').parent().append(errorHtml);
                     form.find('select[name="' + i + '"]').parent().append(errorHtml);
+                    form.find('select[name="' + i + '[]"]').parent().append(errorHtml);
                     form.find('textarea[name="' + i + '"]').parent().append(errorHtml);
                 }
                 if (_jtf.showBorderError) {
                     form.find('input[name="' + i + '"]').addClass(_jtf.errorClass.field);
                     form.find('select[name="' + i + '"]').addClass(_jtf.errorClass.field);
+                    form.find('select[name="' + i + '[]"]').addClass(_jtf.errorClass.field);
                     form.find('textarea[name="' + i + '"]').addClass(_jtf.errorClass.field);
                 }
             });
