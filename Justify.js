@@ -187,8 +187,9 @@ class Justify {
                 let errorHtml = '<span class="' + _jtf.errorClass.span + '">' + e[0] + '</span>';
                 let splitMessage = e[0];
                 if (_jtf.errorField) {
-                    notifyHtml += i + ': ';
-                    splitMessage = i + ': ' + e[0];
+                    let errorField = i.replace('_',' ').replace('-',' ')
+                    notifyHtml += errorField + ': ';
+                    splitMessage = errorField + ': ' + e[0];
                 }
                 (_jtf.splitMessage) ? _jtf.notify('error', splitMessage) : '';
                 notifyHtml += e[0] + '</br>';
