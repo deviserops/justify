@@ -146,6 +146,7 @@ Simply change function representation (tags) according to the frameworks
    justifyError                        false                                   This will show a noty popup when if any error occur
    defaultErrorMessage                 'Please contact admin for more info'    If debug is false and site is in development but still some error occur then it will show the default message
    splitMessage                        false                                   If you want to show all message in different different noty then you can set this to true and increase max number of noty from one to higher number.
+   errorField                          true                                    When show error it will append field name in front of the current field error in custom justify
    loaderClass                         'loader-div'                            When a form is validated by ajax it will take some time this is not good for front end user to wait so if you already have a loader added in your main layout then you can define your own here so the loder will show every time it check the form validation and loader will automatic hide when ajax is complete.
    csrfToken                           required                                If you already added the function from point 4.2 to refresh the token you can define the route here.
    csrfTokenName                       required                                The name of csrf toke field for ex. _token, csrf-token. can be found in framework documentation
