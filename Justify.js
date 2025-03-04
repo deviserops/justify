@@ -277,7 +277,6 @@ class Justify {
 
     callDynamicFn(subFn, param, callable = null) {
         $.each(subFn, function (fnK, fnV) {
-            // console.log(typeof fnV);
             if (typeof fnV == 'string') {
                 callable = (callable != null) ? callable[fnV] : window[fnV];
             }
